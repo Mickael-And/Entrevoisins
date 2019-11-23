@@ -7,26 +7,32 @@ import android.support.v4.app.FragmentPagerAdapter;
 
 public class ListNeighbourPagerAdapter extends FragmentPagerAdapter {
 
-    public ListNeighbourPagerAdapter(FragmentManager fm) {
+    ListNeighbourPagerAdapter(FragmentManager fm) {
         super(fm);
     }
 
     /**
      * getItem is called to instantiate the fragment for the given page.
-     * @param position
-     * @return
+     *
+     * @param position page position
+     * @return associated fragment
      */
     @Override
     public Fragment getItem(int position) {
-        return NeighbourFragment.newInstance();
+        if (position == 0) {
+            return NeighbourFragment.newInstance();
+        } else {
+            return FavoriteNeighbourFragment.newInstance();
+        }
     }
 
     /**
      * get the number of pages
-     * @return
+     *
+     * @return page number
      */
     @Override
     public int getCount() {
-        return 1;
+        return 2;
     }
 }

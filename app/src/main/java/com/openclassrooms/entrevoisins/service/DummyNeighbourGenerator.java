@@ -8,6 +8,9 @@ import java.util.List;
 
 public abstract class DummyNeighbourGenerator {
 
+    /**
+     * Liste des voisins.
+     */
     public static List<Neighbour> DUMMY_NEIGHBOURS = Arrays.asList(
             new Neighbour(1, "Caroline", "http://i.pravatar.cc/150?u=a042581f4e29026704d"),
             new Neighbour(2, "Jack", "http://i.pravatar.cc/150?u=a042581f4e29026704e"),
@@ -23,6 +26,11 @@ public abstract class DummyNeighbourGenerator {
             new Neighbour(12, "Ludovic", "http://i.pravatar.cc/150?u=a042581f3e39026702d")
     );
 
+    /**
+     * Genère la listre des voisins.
+     *
+     * @return les voisins
+     */
     static List<Neighbour> generateNeighbours() {
         return new ArrayList<>(DUMMY_NEIGHBOURS);
     }

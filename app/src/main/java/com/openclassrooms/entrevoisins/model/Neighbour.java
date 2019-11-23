@@ -1,67 +1,59 @@
 package com.openclassrooms.entrevoisins.model;
 
-import java.util.Objects;
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
 /**
  * Model object representing a Neighbour
  */
+@EqualsAndHashCode(of = {"id"})
+@ToString
+@AllArgsConstructor
+@NoArgsConstructor
 public class Neighbour {
 
-    /** Identifier */
+    /**
+     * Identifier.
+     */
+    @Getter
+    @Setter
     private Integer id;
 
-    /** Full name */
+    /**
+     * Full name.
+     */
+    @Getter
+    @Setter
     private String name;
 
-    /** Avatar */
+    /**
+     * Avatar.
+     */
+    @Getter
+    @Setter
     private String avatarUrl;
 
     /**
-     * Constructor
-     * @param id
-     * @param name
-     * @param avatarUrl
+     * State favorite of a neighbour.
+     */
+    @Getter
+    @Setter
+    private boolean isFavorite = true;
+
+    /**
+     * Constructeur sans isFavorite.
+     *
+     * @param id        id
+     * @param name      name
+     * @param avatarUrl chemin de l'avatar
      */
     public Neighbour(Integer id, String name, String avatarUrl) {
         this.id = id;
         this.name = name;
         this.avatarUrl = avatarUrl;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getAvatarUrl() {
-        return avatarUrl;
-    }
-
-    public void setAvatarUrl(String avatarUrl) {
-        this.avatarUrl = avatarUrl;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Neighbour neighbour = (Neighbour) o;
-        return Objects.equals(id, neighbour.id);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id);
     }
 }

@@ -7,10 +7,12 @@ import java.util.List;
 /**
  * Dummy mock for the Api
  */
-public class DummyNeighbourApiService implements  NeighbourApiService {
+public class DummyNeighbourApiService implements NeighbourApiService {
 
+    /**
+     * Liste des voisins.
+     */
     private List<Neighbour> neighbours = DummyNeighbourGenerator.generateNeighbours();
-
 
     /**
      * {@inheritDoc}
@@ -27,4 +29,11 @@ public class DummyNeighbourApiService implements  NeighbourApiService {
     public void deleteNeighbour(Neighbour neighbour) {
         neighbours.remove(neighbour);
     }
+
+    @Override
+    public void changeNeighbourFavoriteState(Neighbour neighbour) {
+        neighbour.setFavorite(!neighbour.isFavorite());
+    }
+
+
 }
