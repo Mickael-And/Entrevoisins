@@ -31,4 +31,12 @@ public interface NeighbourApiService {
      */
     void changeNeighbourFavoriteState(Neighbour neighbour);
 
+    /**
+     * Get a neighbour.
+     *
+     * @param id id of the neighbour
+     * @return neighbour
+     */
+    Neighbour getNeighbour(Integer id);
+
 }

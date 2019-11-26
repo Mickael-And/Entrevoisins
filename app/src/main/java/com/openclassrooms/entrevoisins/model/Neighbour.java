@@ -42,7 +42,35 @@ public class Neighbour {
      */
     @Getter
     @Setter
-    private boolean isFavorite = true;
+    private boolean isFavorite = false;
+
+    /**
+     * Adress.
+     */
+    @Getter
+    @Setter
+    private String adress = "Saint pierre du mont à 5km";
+
+    /**
+     * Phone number.
+     */
+    @Getter
+    @Setter
+    private String phoneNumber = "+33 6 86 57 90 14";
+
+    /**
+     * Facebook link.
+     */
+    @Getter
+    @Setter
+    private String facebookLink = "www.facebook.fr/";
+
+    /**
+     * Neighour description.
+     */
+    @Getter
+    @Setter
+    private String description = "Bonjour! Je osuhaiterais faire de la marche nordique. Pas initiée, je recherche une ou plusieurs personnes susceptibles de m'accompagner! J'aime les jeux de cartes tels la belote et le tarot.";
 
     /**
      * Constructeur sans isFavorite.

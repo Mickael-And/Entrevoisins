@@ -35,5 +35,17 @@ public class DummyNeighbourApiService implements NeighbourApiService {
         neighbour.setFavorite(!neighbour.isFavorite());
     }
 
+    @Override
+    public Neighbour getNeighbour(Integer id) {
+        for (Neighbour neighbour : this.neighbours) {
+            if (neighbour.getId().equals(id)) {
+                return neighbour;
+            }
+        }
+        Neighbour neighbour = new Neighbour();
+        neighbour.setId(Integer.MAX_VALUE);
+        return neighbour;
+    }
+
 
 }

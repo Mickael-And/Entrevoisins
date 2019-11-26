@@ -1,6 +1,7 @@
 package com.openclassrooms.entrevoisins.ui.neighbour_list;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DividerItemDecoration;
@@ -51,10 +52,14 @@ public class NeighbourFragment extends Fragment {
     }
 
     /**
-     * Init the List of neighbours
+     * Init the List of neighbours.
      */
     private void initList() {
-        mRecyclerView.setAdapter(new MyNeighbourRecyclerViewAdapter(mApiService.getNeighbours()));
+        mRecyclerView.setAdapter(new MyNeighbourRecyclerViewAdapter(mApiService.getNeighbours(), neighbour -> {
+            Intent intent = new Intent(getContext(), NeighbourInformationActivity.class);
+            intent.putExtra("neighbour.id", neighbour.getId());
+            startActivity(intent);
+        }));
     }
 
     @Override

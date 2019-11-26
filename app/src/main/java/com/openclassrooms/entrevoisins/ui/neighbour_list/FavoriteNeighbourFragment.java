@@ -1,6 +1,7 @@
 package com.openclassrooms.entrevoisins.ui.neighbour_list;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DividerItemDecoration;
@@ -30,7 +31,6 @@ public class FavoriteNeighbourFragment extends Fragment {
 
     private NeighbourApiService mApiService;
     private RecyclerView mRecyclerView;
-
 
     /**
      * Create and return a new instance
@@ -69,7 +69,11 @@ public class FavoriteNeighbourFragment extends Fragment {
                 favoritesNeighbours.add(neighbour);
             }
         }
-        mRecyclerView.setAdapter(new MyFavoritesRecyclerViewAdapter(favoritesNeighbours));
+        mRecyclerView.setAdapter(new MyFavoritesRecyclerViewAdapter(favoritesNeighbours, neighbour -> {
+            Intent intent = new Intent(getContext(), NeighbourInformationActivity.class);
+            intent.putExtra("neighbour.id", neighbour.getId());
+            startActivity(intent);
+        }));
     }
 
     @Override

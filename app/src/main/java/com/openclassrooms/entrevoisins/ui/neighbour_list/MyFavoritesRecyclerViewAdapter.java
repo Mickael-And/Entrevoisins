@@ -21,9 +21,11 @@ import butterknife.ButterKnife;
 public class MyFavoritesRecyclerViewAdapter extends RecyclerView.Adapter<MyFavoritesRecyclerViewAdapter.ViewHolder> {
 
     private final List<Neighbour> favoritesNeighbours;
+    private final OnItemClickListener onItemClickListener;
 
-    MyFavoritesRecyclerViewAdapter(List<Neighbour> items) {
-        favoritesNeighbours = items;
+    MyFavoritesRecyclerViewAdapter(List<Neighbour> items, OnItemClickListener onItemClickListener) {
+        this.favoritesNeighbours = items;
+        this.onItemClickListener = onItemClickListener;
     }
 
     @NonNull
@@ -42,6 +44,7 @@ public class MyFavoritesRecyclerViewAdapter extends RecyclerView.Adapter<MyFavor
                 .load(neighbour.getAvatarUrl())
                 .apply(RequestOptions.circleCropTransform())
                 .into(holder.mNeighbourAvatar);
+        holder.itemView.setOnClickListener(view -> this.onItemClickListener.onItemClick(neighbour));
     }
 
     @Override
@@ -59,5 +62,12 @@ public class MyFavoritesRecyclerViewAdapter extends RecyclerView.Adapter<MyFavor
             super(view);
             ButterKnife.bind(this, view);
         }
+    }
+
+    /**
+     * Callback pour obtenir un onClickListener sur la recyclerView.
+     */
+    public interface OnItemClickListener {
+        void onItemClick(Neighbour neighbour);
     }
 }
