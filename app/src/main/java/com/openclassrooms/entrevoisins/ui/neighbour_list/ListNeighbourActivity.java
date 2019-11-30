@@ -11,6 +11,10 @@ import com.openclassrooms.entrevoisins.R;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+/**
+ * Activité de lancement de l'application.
+ * Affiche la liste des voisins.
+ */
 public class ListNeighbourActivity extends AppCompatActivity {
 
     // UI Components

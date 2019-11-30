@@ -49,39 +49,27 @@ public class Neighbour {
      */
     @Getter
     @Setter
-    private String adress = "Saint pierre du mont à 5km";
+    private String adress;
 
     /**
      * Phone number.
      */
     @Getter
     @Setter
-    private String phoneNumber = "+33 6 86 57 90 14";
+    private String phoneNumber;
 
     /**
      * Facebook link.
      */
     @Getter
     @Setter
-    private String facebookLink = "www.facebook.fr/";
+    private String facebookLink;
 
     /**
      * Neighour description.
      */
     @Getter
     @Setter
-    private String description = "Bonjour! Je osuhaiterais faire de la marche nordique. Pas initiée, je recherche une ou plusieurs personnes susceptibles de m'accompagner! J'aime les jeux de cartes tels la belote et le tarot.";
+    private String description;
 
-    /**
-     * Constructeur sans isFavorite.
-     *
-     * @param id        id
-     * @param name      name
-     * @param avatarUrl chemin de l'avatar
-     */
-    public Neighbour(Integer id, String name, String avatarUrl) {
-        this.id = id;
-        this.name = name;
-        this.avatarUrl = avatarUrl;
-    }
 }

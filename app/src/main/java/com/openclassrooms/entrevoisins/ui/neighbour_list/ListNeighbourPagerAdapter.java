@@ -4,7 +4,9 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
-
+/**
+ * Adapter permettant la gestion des différentes pages.
+ */
 public class ListNeighbourPagerAdapter extends FragmentPagerAdapter {
 
     ListNeighbourPagerAdapter(FragmentManager fm) {

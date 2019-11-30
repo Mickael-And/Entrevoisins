@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    card_view:cardCornerRadius="4dp"
+    card_view:cardElevation="4dp"
+    card_view:cardUseCompatPadding="true"
+    tools:showIn="@layout/activity_information_neighbour">
+
+    <android.support.constraint.ConstraintLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp">
+
+        <TextView
+            android:id="@+id/tv_neighbour_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/cv_information_title"
+            android:textAlignment="viewStart"
+            android:textColor="@android:color/black"
+            android:textSize="20sp"
+            app:layout_constraintVertical_chainStyle="spread_inside"
+            card_view:layout_constraintBottom_toTopOf="@id/information_cv_divider"
+            card_view:layout_constraintEnd_toEndOf="parent"
+            card_view:layout_constraintStart_toStartOf="parent"
+            card_view:layout_constraintTop_toTopOf="parent" />
+
+        <View
+            android:id="@+id/information_cv_divider"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="2dp"
+            android:background="@color/dividerColor"
+            app:layout_constraintBottom_toTopOf="@id/tv_neighbour_adress"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_neighbour_name" />
+
+
+        <ImageView
+            android:id="@+id/ic_localisation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/icon_localisation_description"
+            android:src="@drawable/ic_room_black_18dp"
+            app:layout_constraintBottom_toBottomOf="@id/tv_neighbour_adress"
+            app:layout_constraintEnd_toStartOf="@id/tv_neighbour_adress"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/tv_neighbour_adress" />
+
+        <TextView
+            android:id="@+id/tv_neighbour_adress"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="16dp"
+            android:text="@string/cv_information_adresse"
+            android:textAlignment="viewStart"
+            android:textSize="13sp"
+            android:textStyle="normal"
+            app:layout_constraintBottom_toTopOf="@id/tv_neighbour_phone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/ic_localisation"
+            app:layout_constraintTop_toBottomOf="@id/information_cv_divider" />
+
+        <ImageView
+            android:id="@+id/ic_phone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/icon_telephone_description"
+            android:src="@drawable/ic_phone_black_18dp"
+            app:layout_constraintBottom_toBottomOf="@id/tv_neighbour_phone"
+            app:layout_constraintEnd_toStartOf="@id/tv_neighbour_phone"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/tv_neighbour_phone" />
+
+        <TextView
+            android:id="@+id/tv_neighbour_phone"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="22dp"
+            android:text="@string/cv_information_telephone"
+            android:textAlignment="viewStart"
+            android:textSize="13sp"
+            android:textStyle="normal"
+            app:layout_constraintBottom_toTopOf="@id/tv_neighbour_facebook"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/ic_phone"
+            app:layout_constraintTop_toBottomOf="@id/tv_neighbour_adress" />
+
+        <ImageView
+            android:id="@+id/ic_language"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/icon_language_description"
+            android:src="@drawable/ic_language_black_18dp"
+            app:layout_constraintBottom_toBottomOf="@id/tv_neighbour_facebook"
+            app:layout_constraintEnd_toStartOf="@id/tv_neighbour_facebook"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/tv_neighbour_facebook" />
+
+        <TextView
+            android:id="@+id/tv_neighbour_facebook"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="22dp"
+            android:text="@string/cv_information_fb"
+            android:textAlignment="viewStart"
+            android:textSize="13sp"
+            android:textStyle="normal"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/ic_language"
+            app:layout_constraintTop_toBottomOf="@id/tv_neighbour_phone" />
+
+    </android.support.constraint.ConstraintLayout>
+
+</android.support.v7.widget.CardView>

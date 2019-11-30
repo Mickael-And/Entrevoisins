@@ -22,9 +22,19 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+/**
+ * Adapter de la {@link RecyclerView} des voisins.
+ */
 public class MyNeighbourRecyclerViewAdapter extends RecyclerView.Adapter<MyNeighbourRecyclerViewAdapter.ViewHolder> {
 
+    /**
+     * Liste des voisins.
+     */
     private final List<Neighbour> mNeighbours;
+
+    /**
+     * Callback permettant l'écoute sur un item de la liste.
+     */
     private final MyFavoritesRecyclerViewAdapter.OnItemClickListener onItemClickListener;
 
 

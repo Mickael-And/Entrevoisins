@@ -8,13 +8,16 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.graphics.Palette;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
@@ -22,98 +25,204 @@ import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.openclassrooms.entrevoisins.R;
 import com.openclassrooms.entrevoisins.di.DI;
+import com.openclassrooms.entrevoisins.events.ChangeNeighbourStateEvent;
+import com.openclassrooms.entrevoisins.intents.IntentName;
 import com.openclassrooms.entrevoisins.model.Neighbour;
 import com.openclassrooms.entrevoisins.service.NeighbourApiService;
 
+import org.greenrobot.eventbus.EventBus;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class NeighbourInformationActivity extends AppCompatActivity {
 
+    /**
+     * Image de la barre d'application.
+     */
     @BindView(R.id.appbar_picture)
     ImageView header;
+
+    /**
+     * Layout permettant l'animation de la barre d'outils.
+     */
     @BindView(R.id.collasping_toolbar)
     CollapsingToolbarLayout collapsingToolbarLayout;
+
+    /**
+     * Barre de l'application.
+     */
     @BindView(R.id.appbar_information_activity)
     AppBarLayout appBarLayout;
+
+    /**
+     * La barre d'outils.
+     */
     @BindView(R.id.anim_toolbar)
     Toolbar toolbar;
 
+    /**
+     * {@link TextView} qui affiche le nom du voisin(e).
+     */
+    @BindView(R.id.tv_neighbour_name)
+    TextView tvName;
 
+    /**
+     * {@link TextView} qui affiche l'adresse du voisin(e).
+     */
+    @BindView(R.id.tv_neighbour_adress)
+    TextView tvAdress;
+
+    /**
+     * {@link TextView} qui affiche le numéro de téléphone du voisin(e).
+     */
+    @BindView(R.id.tv_neighbour_phone)
+    TextView tvPhoneNumber;
+
+    /**
+     * {@link TextView} qui affiche le lien Facebook du voisin(e).
+     */
+    @BindView(R.id.tv_neighbour_facebook)
+    TextView tvFacebookLink;
+
+    /**
+     * {@link TextView} qui affiche la description du voisin(e).
+     */
+    @BindView(R.id.tv_neighbour_description)
+    TextView tvDescription;
+
+    /**
+     * Permet l'ajout ou la suppression du statut de favori à un voisin.
+     */
+    @BindView(R.id.fab_favorite)
+    FloatingActionButton fabFavorite;
+
+
+    /**
+     * Service permettant la gestion des voisin(e)s
+     */
     NeighbourApiService mApiService = DI.getNeighbourApiService();
+
+    /**
+     * Représente l'état de la barre d'application:
+     * <ul>
+     * <li>true: barre étendue</li>
+     * <li>false: barre réduite</li>
+     * </ul>
+     */
     private boolean appBarExpanded;
+
+    /**
+     * Menu de la barre d'outlis.
+     */
     private Menu collapsedMenu;
+
+    /**
+     * Représente la couleur la plus présente sur l'image de la barre d'application.
+     */
     private int mutedColor;
+
+    /**
+     * Voisin(e) séléctioné(e) que l'on souhaite afficher.
+     */
+    private Neighbour selectedNeighbour;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.acitivty_information_neighbour);
+        setContentView(R.layout.activity_information_neighbour);
         ButterKnife.bind(this);
 
+        // fourni la barre d'application que l'on souhaite utiliser
         setSupportActionBar(this.toolbar);
+        this.toolbar.setNavigationOnClickListener(view -> finish());
 
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        initAppBarLayout();
+
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            this.selectedNeighbour = this.mApiService.getNeighbour(extras.getInt(IntentName.INFORMATION_ACTIVITY_INTENT_NAME));
+            updateComponentValues();
         }
+    }
 
-        appBarLayout.addOnOffsetChangedListener((appBarLayout1, i) -> {
+    /**
+     * Met à jour les valeurs des composants de la vue.
+     */
+    private void updateComponentValues() {
+        if (this.selectedNeighbour.getId() != Integer.MAX_VALUE) {
+            Glide.with(getApplicationContext())
+                    .asBitmap()
+                    .load(this.selectedNeighbour.getAvatarUrl())
+                    .placeholder(new ColorDrawable(Color.BLUE)) // affichage lors du chargement
+                    .error(new ColorDrawable(Color.RED)) // affichage si erreur lors du chargement
+                    .fallback(new ColorDrawable(Color.GRAY))// affichage lorsqu'un Url est null
+                    .into(new BitmapImageViewTarget(this.header) {
+                        @Override
+                        public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
+                            super.onResourceReady(resource, transition);
+                            Palette.from(resource).generate(palette -> {
+                                if (palette != null) {
+                                    mutedColor = palette.getMutedColor(R.attr.colorPrimary);
+                                    collapsingToolbarLayout.setContentScrimColor(mutedColor);
+                                } else {
+                                    Log.i(getClass().getName(), "palette = null, pas de récupération de couleur");
+                                }
+                            });
+                        }
+                    });
+            this.collapsingToolbarLayout.setTitle(this.selectedNeighbour.getName());
+            this.tvName.setText(this.selectedNeighbour.getName());
+            this.tvAdress.setText(this.selectedNeighbour.getAdress());
+            this.tvPhoneNumber.setText(this.selectedNeighbour.getPhoneNumber());
+            this.tvFacebookLink.setText(this.selectedNeighbour.getFacebookLink());
+            this.tvDescription.setText(this.selectedNeighbour.getDescription());
+            if (this.selectedNeighbour.isFavorite()) {
+                this.fabFavorite.setImageResource(R.drawable.ic_star_white_24dp);
+            } else {
+                this.fabFavorite.setImageResource(R.drawable.ic_star_border_white_24dp);
+            }
+        }
+    }
+
+    /**
+     * Initialisation de la barre d'application en fonction de son état.
+     */
+    private void initAppBarLayout() {
+        this.appBarLayout.addOnOffsetChangedListener((appBarLayout1, i) -> {
 
             // Vertical offset == 0 indicates appBar is fully expanded
             if (Math.abs(i) >= 250) {
-                appBarExpanded = false;
-                if (getWindow().getStatusBarColor() != mutedColor) {
-                    getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-                    getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-                    getWindow().setStatusBarColor(mutedColor);
+                this.appBarExpanded = false;
+                if (getWindow().getStatusBarColor() != this.mutedColor) {
+                    setStatusBarColor(this.mutedColor);
                 }
                 invalidateOptionsMenu();
             } else {
-                appBarExpanded = true;
+                this.appBarExpanded = true;
                 if (getWindow().getStatusBarColor() != Color.TRANSPARENT) {
-                    getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-                    getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-                    getWindow().setStatusBarColor(Color.TRANSPARENT);
+                    setStatusBarColor(Color.TRANSPARENT);
                 }
                 invalidateOptionsMenu();
             }
         });
-
-
-        Bundle extras = getIntent().getExtras();
-        if (extras != null) {
-            Neighbour selectedNeighbour = mApiService.getNeighbour(extras.getInt("neighbour.id"));
-            if (selectedNeighbour.getId() != Integer.MAX_VALUE) {
-
-                Glide.with(getApplicationContext())
-                        .asBitmap()
-                        .load(selectedNeighbour.getAvatarUrl())
-                        .placeholder(new ColorDrawable(Color.BLUE)) // affichage lors du chargement
-                        .error(new ColorDrawable(Color.RED)) // affichage si erreur lors du chargement
-                        .fallback(new ColorDrawable(Color.GRAY))// affichage lorsqu'un Url est null
-                        .into(new BitmapImageViewTarget(this.header) {
-                            @Override
-                            public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
-                                super.onResourceReady(resource, transition);
-                                Palette.from(resource).generate(palette -> {
-                                    mutedColor = palette.getMutedColor(R.attr.colorPrimary);
-                                    collapsingToolbarLayout.setContentScrimColor(mutedColor);
-                                });
-                            }
-                        });
-                this.collapsingToolbarLayout.setTitle(selectedNeighbour.getName());
-                // TODO: Mise à jour composants
-            }
-        }
     }
 
-    private void setStatusBarColor(int statusColor) {
-
+    /**
+     * Permet le changement de couleur de la barre de notifications.
+     *
+     * @param color couleur à afficher
+     */
+    private void setStatusBarColor(int color) {
+        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+        getWindow().setStatusBarColor(color);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        collapsedMenu = menu;
+        this.collapsedMenu = menu;
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -121,8 +230,13 @@ public class NeighbourInformationActivity extends AppCompatActivity {
     public boolean onPrepareOptionsMenu(Menu menu) {
         if (this.collapsedMenu != null && !this.appBarExpanded) {
             // collapsed
-            collapsedMenu.add("Add").setIcon(R.drawable.ic_star_white_24dp)
-                    .setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
+            if (this.selectedNeighbour.isFavorite()) {
+                this.collapsedMenu.add("Add").setIcon(R.drawable.ic_star_white_24dp)
+                        .setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
+            } else {
+                this.collapsedMenu.add("Add").setIcon(R.drawable.ic_star_border_white_24dp)
+                        .setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
+            }
         }
         return super.onPrepareOptionsMenu(this.collapsedMenu);
     }
@@ -131,15 +245,39 @@ public class NeighbourInformationActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                finish();
+                onBackPressed();
                 break;
             case R.drawable.ic_star_white_24dp:
-                Toast.makeText(this, "Clic favori", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Add to favorites", Toast.LENGTH_SHORT).show();
+                break;
+            case R.drawable.ic_star_border_white_24dp:
+                Toast.makeText(this, "Delete to favorites", Toast.LENGTH_SHORT).show();
                 break;
             default:
                 Toast.makeText(this, "Default case", Toast.LENGTH_SHORT).show();
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @OnClick(R.id.fab_favorite)
+    public void changeNeighbourFavoriteState(FloatingActionButton fabFavorite) {
+        System.out.println("onClick = " + this.selectedNeighbour.isFavorite());
+        if (this.selectedNeighbour.isFavorite()) {
+            this.fabFavorite.setImageResource(R.drawable.ic_star_border_white_24dp);
+            this.selectedNeighbour.setFavorite(false);
+            System.out.println("onChange = " + this.selectedNeighbour.isFavorite());
+        } else {
+            this.fabFavorite.setImageResource(R.drawable.ic_star_white_24dp);
+            this.selectedNeighbour.setFavorite(true);
+            System.out.println("onChange = " + this.selectedNeighbour.isFavorite());
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        System.out.println("onDestroy = " + this.selectedNeighbour.isFavorite());
+        EventBus.getDefault().post(new ChangeNeighbourStateEvent(this.selectedNeighbour));
     }
 }
