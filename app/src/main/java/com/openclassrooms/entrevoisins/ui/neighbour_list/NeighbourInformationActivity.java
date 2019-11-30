@@ -128,6 +128,8 @@ public class NeighbourInformationActivity extends AppCompatActivity {
      */
     private Neighbour selectedNeighbour;
 
+    private static final String FAVORITE_MENU_ITEM_TITLE = "Favorite";
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -231,10 +233,10 @@ public class NeighbourInformationActivity extends AppCompatActivity {
         if (this.collapsedMenu != null && !this.appBarExpanded) {
             // collapsed
             if (this.selectedNeighbour.isFavorite()) {
-                this.collapsedMenu.add("Add").setIcon(R.drawable.ic_star_white_24dp)
+                this.collapsedMenu.add(FAVORITE_MENU_ITEM_TITLE).setIcon(R.drawable.ic_star_white_24dp)
                         .setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
             } else {
-                this.collapsedMenu.add("Add").setIcon(R.drawable.ic_star_border_white_24dp)
+                this.collapsedMenu.add(FAVORITE_MENU_ITEM_TITLE).setIcon(R.drawable.ic_star_border_white_24dp)
                         .setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
             }
         }
@@ -243,41 +245,36 @@ public class NeighbourInformationActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                onBackPressed();
-                break;
-            case R.drawable.ic_star_white_24dp:
-                Toast.makeText(this, "Add to favorites", Toast.LENGTH_SHORT).show();
-                break;
-            case R.drawable.ic_star_border_white_24dp:
-                Toast.makeText(this, "Delete to favorites", Toast.LENGTH_SHORT).show();
-                break;
-            default:
-                Toast.makeText(this, "Default case", Toast.LENGTH_SHORT).show();
-                break;
+        if (item.getTitle().equals(FAVORITE_MENU_ITEM_TITLE)) {
+            if (this.selectedNeighbour.isFavorite()) {
+                item.setIcon(R.drawable.ic_star_border_white_24dp);
+                this.selectedNeighbour.setFavorite(false);
+            } else {
+                item.setIcon(R.drawable.ic_star_white_24dp);
+                this.selectedNeighbour.setFavorite(true);
+            }
         }
         return super.onOptionsItemSelected(item);
     }
 
     @OnClick(R.id.fab_favorite)
-    public void changeNeighbourFavoriteState(FloatingActionButton fabFavorite) {
-        System.out.println("onClick = " + this.selectedNeighbour.isFavorite());
+    public void changeNeighbourFavoriteState() {
         if (this.selectedNeighbour.isFavorite()) {
+            this.fabFavorite.hide(); // TODO: Bug google dans la v28.0.0. A enlever une fois résolu
             this.fabFavorite.setImageResource(R.drawable.ic_star_border_white_24dp);
+            this.fabFavorite.show();// TODO: Bug google dans la v28.0.0. A enlever une fois résolu
             this.selectedNeighbour.setFavorite(false);
-            System.out.println("onChange = " + this.selectedNeighbour.isFavorite());
         } else {
+            this.fabFavorite.hide();// TODO: Bug google dans la v28.0.0. A enlever une fois résolu
             this.fabFavorite.setImageResource(R.drawable.ic_star_white_24dp);
+            this.fabFavorite.show();// TODO: Bug google dans la v28.0.0. A enlever une fois résolu
             this.selectedNeighbour.setFavorite(true);
-            System.out.println("onChange = " + this.selectedNeighbour.isFavorite());
         }
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        System.out.println("onDestroy = " + this.selectedNeighbour.isFavorite());
         EventBus.getDefault().post(new ChangeNeighbourStateEvent(this.selectedNeighbour));
     }
 }
