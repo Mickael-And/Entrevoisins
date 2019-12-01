@@ -25,13 +25,6 @@ public interface NeighbourApiService {
     void deleteNeighbour(Neighbour neighbour);
 
     /**
-     * Change the favorite state of a neighbour.
-     *
-     * @param neighbour neighbour to change
-     */
-    void changeNeighbourFavoriteState(Neighbour neighbour);
-
-    /**
      * Get a neighbour.
      *
      * @param id id of the neighbour

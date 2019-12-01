@@ -31,11 +31,6 @@ public class DummyNeighbourApiService implements NeighbourApiService {
     }
 
     @Override
-    public void changeNeighbourFavoriteState(Neighbour neighbour) {
-        neighbour.setFavorite(!neighbour.isFavorite());
-    }
-
-    @Override
     public Neighbour getNeighbour(Integer id) {
         for (Neighbour neighbour : this.neighbours) {
             if (neighbour.getId().equals(id)) {

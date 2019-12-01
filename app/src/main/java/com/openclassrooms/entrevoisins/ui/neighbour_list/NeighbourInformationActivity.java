@@ -18,7 +18,6 @@ import android.view.MenuItem;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
@@ -102,7 +101,7 @@ public class NeighbourInformationActivity extends AppCompatActivity {
     /**
      * Service permettant la gestion des voisin(e)s
      */
-    NeighbourApiService mApiService = DI.getNeighbourApiService();
+    private NeighbourApiService mApiService = DI.getNeighbourApiService();
 
     /**
      * Représente l'état de la barre d'application:
