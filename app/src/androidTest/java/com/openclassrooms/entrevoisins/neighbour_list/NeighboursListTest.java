@@ -1,14 +1,23 @@
 
 package com.openclassrooms.entrevoisins.neighbour_list;
 
+import android.app.Activity;
+import android.os.SystemClock;
+
 import androidx.test.espresso.contrib.RecyclerViewActions;
+import androidx.test.espresso.intent.Intents;
+import androidx.test.espresso.intent.matcher.IntentMatchers;
+import androidx.test.espresso.intent.rule.IntentsTestRule;
 import androidx.test.espresso.matcher.ViewMatchers;
-import androidx.test.rule.ActivityTestRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import com.openclassrooms.entrevoisins.R;
+import com.openclassrooms.entrevoisins.di.DI;
+import com.openclassrooms.entrevoisins.service.NeighbourApiService;
 import com.openclassrooms.entrevoisins.ui.neighbour_list.ListNeighbourActivity;
-import com.openclassrooms.entrevoisins.utils.DeleteViewAction;
+import com.openclassrooms.entrevoisins.ui.neighbour_list.NeighbourInformationActivity;
+import com.openclassrooms.entrevoisins.utils.RecyclerViewItemCountAssertion;
+import com.openclassrooms.entrevoisins.utils.RecyclerViewUtils;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -20,8 +29,8 @@ import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.assertThat;
 import static androidx.test.espresso.matcher.ViewMatchers.hasMinimumChildCount;
+import static androidx.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
-import static com.openclassrooms.entrevoisins.utils.RecyclerViewItemCountAssertion.withItemCount;
 import static org.hamcrest.core.IsNull.notNullValue;
 
 
@@ -31,18 +40,18 @@ import static org.hamcrest.core.IsNull.notNullValue;
 @RunWith(AndroidJUnit4.class)
 public class NeighboursListTest {
 
-    // This is fixed
-    private static int ITEMS_COUNT = 12;
-
-    private ListNeighbourActivity mActivity;
+    /**
+     * Service de gestion des utilisateurs.
+     */
+    private NeighbourApiService mApiService;
 
     @Rule
-    public ActivityTestRule<ListNeighbourActivity> mActivityRule =
-            new ActivityTestRule(ListNeighbourActivity.class);
+    public IntentsTestRule<ListNeighbourActivity> intentsTestRule = new IntentsTestRule<>(ListNeighbourActivity.class);
 
     @Before
     public void setUp() {
-        mActivity = mActivityRule.getActivity();
+        Activity mActivity = intentsTestRule.getActivity();
+        this.mApiService = DI.getNewInstanceApiService();
         assertThat(mActivity, notNullValue());
     }
 
@@ -57,23 +66,37 @@ public class NeighboursListTest {
     }
 
     /**
-     * When we delete an item, the item is no more shown
+     * Test si l'activité {@link NeighbourInformationActivity} se lance bien.
      */
-    @Test
-    public void myNeighboursList_deleteAction_shouldRemoveItem() {
-        // Given : We remove the element at position 2
-        onView(ViewMatchers.withId(R.id.list_neighbours)).check(withItemCount(ITEMS_COUNT));
-        // When perform a click on a delete icon
-        onView(ViewMatchers.withId(R.id.list_neighbours))
-                .perform(RecyclerViewActions.actionOnItemAtPosition(1, new DeleteViewAction()));
-        // Then : the number of element is 11
-        onView(ViewMatchers.withId(R.id.list_neighbours)).check(withItemCount(ITEMS_COUNT - 1));
-    }
-
-
     @Test
     public void checkIfMyNeighbourInformationActivityIsLaunching() {
         onView(withId(R.id.list_neighbours)).perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
+        Intents.intended(IntentMatchers.hasComponent(NeighbourInformationActivity.class.getName()));
+    }
+
+    /**
+     * Test si la suppression d'un utilisateur fonctionne bien.
+     */
+    @Test
+    public void checkIfRemovingUserIsWorking() {
+        int currentSizeList = mApiService.getNeighbours().size();
+        onView(withId(R.id.list_neighbours)).check(RecyclerViewItemCountAssertion.withItemCount(currentSizeList));
+        onView(withId(R.id.list_neighbours)).perform(RecyclerViewActions.actionOnItemAtPosition(0, RecyclerViewUtils.clickChildView(R.id.item_list_delete_button)));
+        onView(withId(R.id.list_neighbours)).check(RecyclerViewItemCountAssertion.withItemCount(currentSizeList - 1));
+    }
+
+
+    /**
+     * Test vérifiant que l'onglet favori n'affiche que les voisins favoris.
+     */
+    @Test
+    public void checkFavoriteList() {
+        onView(withId(R.id.list_favorite_neighbours)).check(RecyclerViewItemCountAssertion.withItemCount(0));
+        onView(withId(R.id.list_neighbours)).perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
+        onView(withId(R.id.fab_favorite)).perform(click());
+        onView(withContentDescription(R.string.abc_action_bar_up_description)).perform(click());
+        SystemClock.sleep(800);
+        onView(withId(R.id.list_favorite_neighbours)).check(RecyclerViewItemCountAssertion.withItemCount(1));
     }
 
 
