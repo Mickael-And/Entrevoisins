@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DividerItemDecoration;
@@ -46,6 +47,17 @@ public class FavoriteNeighbourFragment extends Fragment {
     RecyclerView mRecyclerView;
 
     /**
+     * Composant affichant le message lorsqu'il n'y a pas de favori.
+     */
+    @BindView(R.id.tv_no_favorites)
+    TextView tvNoFavorites;
+
+    /**
+     * Adapter de la {@link RecyclerView} contenant les voisins.
+     */
+    private MyFavoritesRecyclerViewAdapter favoritesAdapter;
+
+    /**
      * Create and return a new instance
      *
      * @return @{@link FavoriteNeighbourFragment}
@@ -58,6 +70,7 @@ public class FavoriteNeighbourFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mApiService = DI.getNeighbourApiService();
+        EventBus.getDefault().register(this);
     }
 
     @Override
@@ -71,8 +84,22 @@ public class FavoriteNeighbourFragment extends Fragment {
         } else {
             Log.i(getClass().getName(), "Context = null, pas de mise en place des items decoration sur la recyclerView");
         }
-        initList();
+        this.initList();
+        this.checkIfRecyclerViewIsEmpty();
         return view;
+    }
+
+    /**
+     * Vérifie si la liste de voisin est vide.
+     */
+    private void checkIfRecyclerViewIsEmpty() {
+        if (this.favoritesAdapter.getItemCount() == 0) {
+            this.mRecyclerView.setVisibility(View.INVISIBLE);
+            this.tvNoFavorites.setVisibility(View.VISIBLE);
+        } else {
+            this.mRecyclerView.setVisibility(View.VISIBLE);
+            this.tvNoFavorites.setVisibility(View.INVISIBLE);
+        }
     }
 
     /**
@@ -85,22 +112,18 @@ public class FavoriteNeighbourFragment extends Fragment {
                 favoritesNeighbours.add(neighbour);
             }
         }
-        mRecyclerView.setAdapter(new MyFavoritesRecyclerViewAdapter(favoritesNeighbours, neighbour -> {
+        this.favoritesAdapter = new MyFavoritesRecyclerViewAdapter(favoritesNeighbours, neighbour -> {
             Intent intent = new Intent(getContext(), NeighbourInformationActivity.class);
             intent.putExtra(IntentName.INFORMATION_ACTIVITY_INTENT_NAME, neighbour.getId());
             startActivity(intent);
-        }));
+        });
+
+        mRecyclerView.setAdapter(this.favoritesAdapter);
     }
 
     @Override
-    public void onStart() {
-        super.onStart();
-        EventBus.getDefault().register(this);
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
+    public void onDestroy() {
+        super.onDestroy();
         EventBus.getDefault().unregister(this);
     }
 
@@ -111,7 +134,8 @@ public class FavoriteNeighbourFragment extends Fragment {
      */
     @Subscribe
     public void onChangeNeighbourState(ChangeNeighbourStateEvent event) {
-        initList();
+        this.favoritesAdapter.manageFavorite(event.neighbour);
+        this.checkIfRecyclerViewIsEmpty();
     }
 
     /**
@@ -121,7 +145,8 @@ public class FavoriteNeighbourFragment extends Fragment {
      */
     @Subscribe
     public void onDeleteNeighbour(DeleteNeighbourEvent event) {
-        initList();
+        this.favoritesAdapter.deleteNeighbour(event.neighbour);
+        this.checkIfRecyclerViewIsEmpty();
     }
 
 }

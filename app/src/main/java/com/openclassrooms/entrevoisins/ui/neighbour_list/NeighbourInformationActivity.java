@@ -4,14 +4,6 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import com.google.android.material.appbar.AppBarLayout;
-import com.google.android.material.appbar.CollapsingToolbarLayout;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.palette.graphics.Palette;
-import androidx.appcompat.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -19,9 +11,18 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.palette.graphics.Palette;
+
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.bumptech.glide.request.transition.Transition;
+import com.google.android.material.appbar.AppBarLayout;
+import com.google.android.material.appbar.CollapsingToolbarLayout;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.openclassrooms.entrevoisins.R;
 import com.openclassrooms.entrevoisins.di.DI;
 import com.openclassrooms.entrevoisins.events.ChangeNeighbourStateEvent;
@@ -263,17 +264,13 @@ public class NeighbourInformationActivity extends AppCompatActivity {
             this.fabFavorite.setImageResource(R.drawable.ic_star_border_white_24dp);
             this.fabFavorite.show();// TODO: Bug google dans la v28.0.0. A enlever une fois résolu
             this.selectedNeighbour.setFavorite(false);
+            EventBus.getDefault().post(new ChangeNeighbourStateEvent(this.selectedNeighbour));
         } else {
             this.fabFavorite.hide();// TODO: Bug google dans la v28.0.0. A enlever une fois résolu
             this.fabFavorite.setImageResource(R.drawable.ic_star_white_24dp);
             this.fabFavorite.show();// TODO: Bug google dans la v28.0.0. A enlever une fois résolu
             this.selectedNeighbour.setFavorite(true);
+            EventBus.getDefault().post(new ChangeNeighbourStateEvent(this.selectedNeighbour));
         }
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        EventBus.getDefault().post(new ChangeNeighbourStateEvent(this.selectedNeighbour));
     }
 }

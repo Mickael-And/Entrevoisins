@@ -1,12 +1,13 @@
 package com.openclassrooms.entrevoisins.ui.neighbour_list;
 
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
@@ -60,6 +61,36 @@ public class MyFavoritesRecyclerViewAdapter extends RecyclerView.Adapter<MyFavor
     @Override
     public int getItemCount() {
         return favoritesNeighbours.size();
+    }
+
+
+    /**
+     * Ajoute le voisin si il est favori. Le supprime sinon.
+     *
+     * @param neighbour voisin que l'on souhaite ajouter ou supprimer de la liste
+     */
+    void manageFavorite(Neighbour neighbour) {
+        if (neighbour.isFavorite()) {
+            if (!this.favoritesNeighbours.contains(neighbour)) {
+                this.favoritesNeighbours.add(neighbour);
+                notifyDataSetChanged();
+            }
+        } else {
+            this.favoritesNeighbours.remove(neighbour);
+            notifyDataSetChanged();
+        }
+    }
+
+    /**
+     * Supprime un voisin de la liste de l'adapter.
+     *
+     * @param neighbour voisin que l'on souhaite supprimer
+     */
+    void deleteNeighbour(Neighbour neighbour) {
+        if (this.favoritesNeighbours.contains(neighbour)) {
+            this.favoritesNeighbours.remove(neighbour);
+            notifyDataSetChanged();
+        }
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

@@ -2,7 +2,6 @@
 package com.openclassrooms.entrevoisins.neighbour_list;
 
 import android.app.Activity;
-import android.os.SystemClock;
 
 import androidx.test.espresso.contrib.RecyclerViewActions;
 import androidx.test.espresso.intent.Intents;
@@ -95,7 +94,6 @@ public class NeighboursListTest {
         onView(withId(R.id.list_neighbours)).perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
         onView(withId(R.id.fab_favorite)).perform(click());
         onView(withContentDescription(R.string.abc_action_bar_up_description)).perform(click());
-        SystemClock.sleep(800);
         onView(withId(R.id.list_favorite_neighbours)).check(RecyclerViewItemCountAssertion.withItemCount(1));
     }
 

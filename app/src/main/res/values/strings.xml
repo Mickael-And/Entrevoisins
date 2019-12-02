@@ -13,4 +13,6 @@
     <string name="cv_content_description">Quanta autem vis amicitiae sit, ex hoc intellegi maxime potest, quod ex infinita societate generis humani, quam conciliavit ipsa natura, ita contracta res est et adducta in angustum ut omnis caritas aut inter duos aut inter paucos iungeretur.</string>
     <string name="neighbour_avatar_description">Neighbour avatar</string>
     <string name="garbage_icon_description">Garbage icon</string>
+    <string name="no_neighbours_information">You have no neighbours</string>
+    <string name="no_favorites_description">You have no favorites</string>
 </resources>

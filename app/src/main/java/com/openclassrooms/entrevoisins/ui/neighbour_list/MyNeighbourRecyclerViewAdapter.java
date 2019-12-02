@@ -1,13 +1,14 @@
 package com.openclassrooms.entrevoisins.ui.neighbour_list;
 
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
@@ -66,6 +67,18 @@ public class MyNeighbourRecyclerViewAdapter extends RecyclerView.Adapter<MyNeigh
     @Override
     public int getItemCount() {
         return mNeighbours.size();
+    }
+
+    /**
+     * Supprime un voisin de la liste de l'adapter.
+     *
+     * @param neighbour voisin que l'on souhaite supprimer
+     */
+    void deleteNeighbour(Neighbour neighbour) {
+        if (this.mNeighbours.contains(neighbour)) {
+            this.mNeighbours.remove(neighbour);
+            notifyDataSetChanged();
+        }
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
