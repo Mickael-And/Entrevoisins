@@ -1,7 +1,6 @@
 
 package com.openclassrooms.entrevoisins.neighbour_information;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 
@@ -37,8 +36,6 @@ public class NeighboursInformationTest {
      */
     private NeighbourApiService mApiService;
 
-    Activity activity;
-
     @Rule
     public IntentsTestRule<NeighbourInformationActivity> mActivityRule =
             new IntentsTestRule<NeighbourInformationActivity>(NeighbourInformationActivity.class) {
@@ -53,7 +50,6 @@ public class NeighboursInformationTest {
 
     @Before
     public void setUp() {
-        activity = mActivityRule.getActivity();
         this.mApiService = DI.getNewInstanceApiService();
     }
 
