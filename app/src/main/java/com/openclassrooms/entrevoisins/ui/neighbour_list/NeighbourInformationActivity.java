@@ -259,16 +259,17 @@ public class NeighbourInformationActivity extends AppCompatActivity {
 
     @OnClick(R.id.fab_favorite)
     public void changeNeighbourFavoriteState() {
+        // Ajout des .hide() et .show() car bug google dans la v28.0.0. Le logo du FAB disparait. A supprimer une fois résolu
         if (this.selectedNeighbour.isFavorite()) {
-            this.fabFavorite.hide(); // TODO: Bug google dans la v28.0.0. A enlever une fois résolu
+            this.fabFavorite.hide();
             this.fabFavorite.setImageResource(R.drawable.ic_star_border_white_24dp);
-            this.fabFavorite.show();// TODO: Bug google dans la v28.0.0. A enlever une fois résolu
+            this.fabFavorite.show();
             this.selectedNeighbour.setFavorite(false);
             EventBus.getDefault().post(new ChangeNeighbourStateEvent(this.selectedNeighbour));
         } else {
-            this.fabFavorite.hide();// TODO: Bug google dans la v28.0.0. A enlever une fois résolu
+            this.fabFavorite.hide();
             this.fabFavorite.setImageResource(R.drawable.ic_star_white_24dp);
-            this.fabFavorite.show();// TODO: Bug google dans la v28.0.0. A enlever une fois résolu
+            this.fabFavorite.show();
             this.selectedNeighbour.setFavorite(true);
             EventBus.getDefault().post(new ChangeNeighbourStateEvent(this.selectedNeighbour));
         }
