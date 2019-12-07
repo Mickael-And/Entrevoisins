@@ -36,10 +36,26 @@ public class NeighbourServiceTest {
     }
 
     @Test
+    public void checkNeighboursListSize() {
+        List<Neighbour> neighbours = service.getNeighbours();
+        List<Neighbour> expectedNeighbours = DummyNeighbourGenerator.DUMMY_NEIGHBOURS;
+        assertEquals(expectedNeighbours.size(), neighbours.size());
+    }
+
+    @Test
     public void deleteNeighbourWithSuccess() {
         Neighbour neighbourToDelete = service.getNeighbours().get(0);
         service.deleteNeighbour(neighbourToDelete);
         assertFalse(service.getNeighbours().contains(neighbourToDelete));
+    }
+
+    @Test
+    public void deleteNeighbourWithBadNeighbour() {
+        int numberOfNeighbours = this.service.getNeighbours().size();
+        Neighbour neighbourToDelete = new Neighbour();
+        neighbourToDelete.setId(1);
+        service.deleteNeighbour(neighbourToDelete);
+        assertEquals(numberOfNeighbours, this.service.getNeighbours().size());
     }
 
     @Test
@@ -50,4 +66,11 @@ public class NeighbourServiceTest {
         Neighbour neighbourToTest = this.service.getNeighbour(neighbour.getId());
         assertEquals(neighbour, neighbourToTest);
     }
+
+    @Test
+    public void getANeighbourWithBadId() {
+        Neighbour neighbourToTest = this.service.getNeighbour(54);
+        assertEquals((int) neighbourToTest.getId(), Integer.MAX_VALUE);
+    }
+
 }

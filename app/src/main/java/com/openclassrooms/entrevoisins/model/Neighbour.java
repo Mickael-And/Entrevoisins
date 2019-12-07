@@ -1,7 +1,6 @@
 package com.openclassrooms.entrevoisins.model;
 
 import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -10,7 +9,6 @@ import lombok.ToString;
 /**
  * Model object representing a Neighbour
  */
-@EqualsAndHashCode(of = {"id"})
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor

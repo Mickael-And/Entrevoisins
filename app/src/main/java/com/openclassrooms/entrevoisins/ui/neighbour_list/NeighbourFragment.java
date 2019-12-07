@@ -124,6 +124,7 @@ public class NeighbourFragment extends Fragment {
     @Subscribe
     public void onDeleteNeighbour(DeleteNeighbourEvent event) {
         this.neighboursAdapter.deleteNeighbour(event.neighbour);
+        this.mApiService.deleteNeighbour(event.neighbour);
         checkIfRecyclerViewIsEmpty();
     }
 }
