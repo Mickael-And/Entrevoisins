@@ -249,9 +249,11 @@ public class NeighbourInformationActivity extends AppCompatActivity {
             if (this.selectedNeighbour.isFavorite()) {
                 item.setIcon(R.drawable.ic_star_border_white_24dp);
                 this.selectedNeighbour.setFavorite(false);
+                EventBus.getDefault().post(new ChangeNeighbourStateEvent(this.selectedNeighbour));
             } else {
                 item.setIcon(R.drawable.ic_star_white_24dp);
                 this.selectedNeighbour.setFavorite(true);
+                EventBus.getDefault().post(new ChangeNeighbourStateEvent(this.selectedNeighbour));
             }
         }
         return super.onOptionsItemSelected(item);
