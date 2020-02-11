@@ -14,7 +14,7 @@ import com.openclassrooms.entrevoisins.R;
 import com.openclassrooms.entrevoisins.di.DI;
 import com.openclassrooms.entrevoisins.service.NeighbourApiService;
 import com.openclassrooms.entrevoisins.ui.neighbour_list.ListNeighbourActivity;
-import com.openclassrooms.entrevoisins.ui.neighbour_list.NeighbourInformationActivity;
+import com.openclassrooms.entrevoisins.ui.information.NeighbourInformationActivity;
 import com.openclassrooms.entrevoisins.utils.RecyclerViewItemCountAssertion;
 import com.openclassrooms.entrevoisins.utils.RecyclerViewUtils;
 

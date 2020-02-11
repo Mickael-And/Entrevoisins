@@ -23,7 +23,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.neighbour_list.NeighbourInformationActivity"
+            android:name=".ui.information.NeighbourInformationActivity"
             android:parentActivityName=".ui.neighbour_list.ListNeighbourActivity"
             android:theme="@style/AppTheme.NoActionBar" />
     </application>

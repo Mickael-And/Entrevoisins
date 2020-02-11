@@ -6,6 +6,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * Classe abstraite contenant les données factices nécessaires à l'application.
+ */
 abstract class DummyNeighbourGenerator {
 
     /**

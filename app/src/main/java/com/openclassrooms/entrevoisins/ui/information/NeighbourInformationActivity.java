@@ -1,4 +1,4 @@
-package com.openclassrooms.entrevoisins.ui.neighbour_list;
+package com.openclassrooms.entrevoisins.ui.information;
 
 import android.graphics.Bitmap;
 import android.graphics.Color;
